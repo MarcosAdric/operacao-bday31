@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MISSÃO: ANIVERSÁRIO 3.1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Classified Dossier (Manila Beige, Typewriter Black, Stamp Red) -->
+    <!-- Application Structure Plan: A single-page, interactive digital dossier. The user scrolls through the "mission briefing" which contains the party details. The key interaction is a dynamic RSVP section with clickable buttons that, upon being clicked, reveal a themed confirmation message. This structure turns a static invitation into an engaging, thematic experience that guides the user to the primary call-to-action. -->
+    <!-- Visualization & Content Choices: The source is text-based. Information (date, deadline) is presented as "data points" in a dossier format using stylized text and icons. The main interaction is the RSVP: Goal=Get confirmation, Viz/Method=Two large, styled HTML buttons, Interaction=Clicking a button uses JS to replace the button area with a confirmation message, Justification=More engaging than a static request and reinforces the spy theme. No charts needed. Confirmed NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Special Elite', monospace;
+            background-color: #F3E9D2;
+        }
+        .stamp {
+            font-family: 'Oswald', sans-serif;
+            color: #b91c1c;
+            border: 4px solid #b91c1c;
+            padding: 2px 10px;
+            transform: rotate(-5deg);
+            letter-spacing: 2px;
+            display: inline-block;
+        }
+        .dossier-container {
+            background-color: #FAF6E9;
+            border-left: 5px solid #c8a46e;
+        }
+        .btn-mission {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-mission:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+
+    <div class="max-w-2xl mx-auto dossier-container shadow-2xl p-6 sm:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="stamp text-3xl sm:text-4xl">CONFIDENCIAL</h1>
+        </header>
+
+        <main>
+            <section id="mission-briefing" class="border-b-2 border-dashed border-gray-400 pb-6">
+                <h2 class="text-xl font-bold mb-2">OPERAÇÃO CÓDIGO: `B-DAY 3.1`</h2>
+                <p><span class="font-bold">NÍVEL DE SIGILO:</span> MÁXIMO</p>
+                <p><span class="font-bold">EMISSOR:</span> Marcos Adric - Comando Central de Comemorações</p>
+                
+                <div class="mt-6 p-4 bg-yellow-100 border border-yellow-300">
+                    <p class="font-bold text-lg">ASSUNTO: Missão de Aniversário - Meus 31 Anos</p>
+                    <p class="mt-2">Você foi selecionado(a) para uma operação de alta prioridade. O objetivo é celebrar meu 31º aniversário em uma noite de confraternização e sigilo absoluto.</p>
+                </div>
+            </section>
+
+            <section id="mission-details" class="mt-6 border-b-2 border-dashed border-gray-400 pb-6">
+                 <h2 class="text-xl font-bold mb-4">DETALHES DA OPERAÇÃO</h2>
+                 <div class="mb-4">
+                    <p class="font-bold">DATA DA OPERAÇÃO:</p>
+                    <p class="text-lg">🗓️ **Sábado, 15 de Novembro de 2025, às 16h**</p>
+                 </div>
+                 <div>
+                    <p class="font-bold">STATUS DA MISSÃO:</p>
+                    <p>O ponto de encontro (LOCAL) é uma informação sensível. As coordenadas exatas só serão desbloqueadas após a confirmação do número total de agentes em campo. Sua resposta é a peça-chave para a próxima fase do plano.</p>
+                 </div>
+            </section>
+            
+            <section id="action-required" class="mt-6 text-center">
+                <h2 class="text-xl font-bold text-red-800 mb-2">AÇÃO REQUERIDA (URGENTE)</h2>
+                <p class="mb-4">Confirme sua presença para que a inteligência possa definir o local seguro para o evento.</p>
+                
+                <div class="bg-gray-200 p-4 my-4">
+                    <p class="font-bold text-lg">PRAZO FINAL PARA CONFIRMAÇÃO:</p>
+                    <p class="text-2xl font-bold text-red-700">‼️ 26 DE OUTUBRO ‼️</p>
+                </div>
+
+                <div id="rsvp-container" class="mt-6">
+                    <p class="mb-4">Responda a este comunicado com sua decisão:</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="handleRsvp(true)" class="btn-mission bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
+                            `ACEITO A MISSÃO`
+                        </button>
+                        <button onclick="handleRsvp(false)" class="btn-mission bg-red-700 hover:bg-red-800 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
+                            `REJEITO A MISSÃO`
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+        
+        <footer class="mt-8 pt-4 border-t border-gray-300 text-center text-sm text-gray-500">
+            <p>*Aguardando seu retorno. Mais informações serão enviadas apenas aos agentes confirmados.*</p>
+            <p class="mt-1">*Esta mensagem não se autodestruirá, mas o sigilo é essencial.*</p>
+        </footer>
+
+    </div>
+
+    <script>
+        function handleRsvp(accepted) {
+            const rsvpContainer = document.getElementById('rsvp-container');
+            let confirmationMessage = '';
+            
+            // IMPORTANTE: Substitua o XXXXXXXXXXX pelo seu número de WhatsApp com DDD (ex: 5511912345678)
+            const hostPhoneNumber = '55XXXXXXXXXXX'; 
+            let whatsAppMessage = '';
+
+            if (accepted) {
+                confirmationMessage = `
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
+                        <p class="font-bold text-lg">CONFIRMADO, AGENTE!</p>
+                        <p>Sua presença foi registrada. Um canal de comunicação seguro será aberto para enviar sua confirmação ao Comando Central.</p>
+                    </div>
+                `;
+                whatsAppMessage = encodeURIComponent('MISSÃO B-DAY 3.1: Eu aceito a missão! Presença confirmada.');
+            } else {
+                confirmationMessage = `
+                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
+                        <p class="font-bold text-lg">ENTENDIDO.</p>
+                        <p>Sua ausência foi registrada. Agradecemos a sua discrição. Sentiremos sua falta na operação.</p>
+                    </div>
+                `;
+                whatsAppMessage = encodeURIComponent('MISSÃO B-DAY 3.1: Infelizmente, terei que rejeitar a missão desta vez.');
+            }
+            rsvpContainer.innerHTML = confirmationMessage;
+
+            // Abre o link do WhatsApp em uma nova aba para enviar a confirmação
+            setTimeout(() => {
+                window.open(`https://wa.me/${+5541988759875}?text=${whatsAppMessage}`, '_blank');
+            }, 800);
+        }
+    </script>
+
+</body>
+</html>
+
