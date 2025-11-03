@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MISSÃO: ANIVERSÁRIO 3.1</title>
+    <title>MISSÃO: ANIVERSÁRIO 3.1 - FASE 2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Oswald:wght@700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Classified Dossier (Manila Beige, Typewriter Black, Stamp Red) -->
-    <!-- Application Structure Plan: A single-page, interactive digital dossier. The user scrolls through the "mission briefing" which contains the party details. The key interaction is a dynamic RSVP section with clickable buttons that, upon being clicked, reveal a themed confirmation message. This structure turns a static invitation into an engaging, thematic experience that guides the user to the primary call-to-action. -->
-    <!-- Visualization & Content Choices: The source is text-based. Information (date, deadline) is presented as "data points" in a dossier format using stylized text and icons. The main interaction is the RSVP: Goal=Get confirmation, Viz/Method=Two large, styled HTML buttons, Interaction=Clicking a button uses JS to replace the button area with a confirmation message, Justification=More engaging than a static request and reinforces the spy theme. No charts needed. Confirmed NO SVG/Mermaid. -->
+    <!-- Chosen Palette: Classified Dossier (Manila Beige, Typewriter Black, Stamp Red, Success Green) -->
+    <!-- Application Structure Plan: A two-step, single-page application. Step 1 (Security Check): User must enter their name to "authenticate". JS validates the input. Step 2 (Mission Briefing): On success, Step 1 is hidden and Step 2 is shown. The mission details (riddle) are displayed, and the heading is dynamically personalized with the name entered in Step 1. The core interaction (riddle) remains, enhancing the personal feel. -->
+    <!-- Visualization & Content Choices: Added an initial "authentication" form (HTML input + button). JS function `identifyAgent()` handles validation, personalization, and toggles visibility of the main content `div`. The `agent-name-display` span is the target for personalization. No charts needed. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -37,107 +37,162 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
+        /* O conteúdo da missão começa oculto */
+        #mission-content {
+            display: none;
+        }
     </style>
 </head>
 <body class="text-gray-800 p-4 sm:p-6 md:p-8">
 
-    <div class="w-full max-w-2xl mx-auto dossier-container shadow-2xl p-6 sm:p-8">
+    <!-- TELA 1: CHECAGEM DE IDENTIDADE (VISÍVEL NO INÍCIO) -->
+    <div id="security-check" class="w-full max-w-2xl mx-auto dossier-container shadow-2xl p-6 sm:p-8">
+        <header class="text-center mb-8">
+            <h1 class="stamp text-3xl sm:text-4xl">FASE 2</h1>
+        </header>
+        <main>
+            <h2 class="text-xl font-bold text-red-800 mb-4">SEGURANÇA DO PONTO DE ENCONTRO</h2>
+            <p class="mb-4">AGENTE, esta é uma transmissão segura para agentes confirmados.</p>
+            <p class="mb-6">Por favor, insira seu nome (nome-código) para acessar os detalhes da missão.</p>
+            
+            <label for="agent-name-input" class="block font-bold mb-2">IDENTIFICAÇÃO DE AGENTE:</label>
+            <input type="text" id="agent-name-input" class="w-full p-3 font-mono text-xl border-2 border-gray-400 bg-white" placeholder="Digite seu nome completo...">
+            <p id="name-error" class="text-red-600 mt-2 font-bold" style="display: none;">Por favor, insira seu nome para se identificar.</p>
+            
+            <button onclick="identifyAgent()" class="btn-mission w-full mt-4 bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
+                ACESSAR DOSSIÊ
+            </button>
+        </main>
+        <footer class="mt-8 pt-4 border-t border-gray-300 text-center text-sm text-gray-500">
+            <p>*Aguardando identificação...*</p>
+        </footer>
+    </div>
+
+    <!-- TELA 2: CONTEÚDO DA MISSÃO (COMEÇA OCULTA) -->
+    <div id="mission-content" class="w-full max-w-2xl mx-auto dossier-container shadow-2xl p-6 sm:p-8">
         
         <header class="text-center mb-8">
-            <h1 class="stamp text-3xl sm:text-4xl">CONFIDENCIAL</h1>
+            <h1 class="stamp text-3xl sm:text-4xl">FASE 2</h1>
         </header>
 
         <main>
-            <section id="mission-briefing" class="border-b-2 border-dashed border-gray-400 pb-6">
-                <h2 class="text-xl font-bold mb-2">OPERAÇÃO CÓDIGO: `B-DAY 3.1`</h2>
-                <p><span class="font-bold">NÍVEL DE SIGILO:</span> MÁXIMO</p>
-                <p><span class="font-bold">EMISSOR:</span> Marcos Adric - Comando Central de Comemorações</p>
+            <section id="mission-update" class="border-b-2 border-dashed border-gray-400 pb-6">
+                <!-- NOME INJETADO AQUI -->
+                <h2 class="text-xl font-bold mb-2">PARA: AGENTE <span id="agent-name-display" class="text-blue-700"></span></h2> 
+                
+                <p class="text-lg">Assunto: Início da "Operação Alta Amizade_Código B-DAY 3.1"</p>
+                <p class="mt-4">Sua confirmação foi recebida. Bem-vindo à equipe. A Fase 1 (Recrutamento) está concluída. A Fase 2 (Localização) está agora ativa.</p>
                 
                 <div class="mt-6 p-4 bg-yellow-100 border border-yellow-300">
-                    <p class="font-bold text-lg">ASSUNTO: Missão de Aniversário - Meus 31 Anos</p>
-                    <p class="mt-2">Você foi selecionado(a) para <span class="font-bold">uma operação de alta amizade</span>. O objetivo é celebrar meu 31º aniversário em <span class="font-bold">um dia de confraternização</span> e <span class="font-bold">divertimento absoluto</span>.</p>
+                    <p class="font-bold text-lg">DADOS DE INTELIGÊNCIA (PARCIAL):</p>
+                    <p class="mt-2">Nossos analistas confirmaram parte das coordenadas da "Base de Operações" (Salão de Festas).</p>
+                    <p class="text-2xl font-bold text-center my-2">Rua Lamenha Lins</p>
                 </div>
             </section>
 
-            <section id="mission-details" class="mt-6 border-b-2 border-dashed border-gray-400 pb-6">
-                 <h2 class="text-xl font-bold mb-4">DETALHES DA OPERAÇÃO</h2>
-                 <div class="mb-4">
-                    <p class="font-bold">DATA DA OPERAÇÃO:</p>
-                    <p class="text-lg">🗓️ <strong>Sábado, 15 de Novembro de 2025, às 16h</strong></p>
+            <section id="decryption-challenge" class="mt-6">
+                 <h2 class="text-xl font-bold text-red-800 mb-4">DESAFIO DE DECODIFICAÇÃO (URGENTE)</h2>
+                 <p class="mb-4">O número exato da base está protegido por uma cifra de segurança. Use sua capacidade de dedução para quebrar o código.</p>
+
+                 <div class="bg-gray-200 p-4 my-4 border border-gray-400">
+                    <p class="font-bold text-lg text-center">ENIGMA DA CIFRA:</p>
+                    <p class="text-center text-lg mt-2">"Eu sou o número de ladrões que seguiram Ali Babá... <strong>mais um</strong>."</p>
                  </div>
-                 <div>
-                    <p class="font-bold">STATUS DA MISSÃO:</p>
-                    <p>O ponto de encontro (LOCAL) é uma informação sensível. As coordenadas exatas só serão desbloqueadas após a confirmação do número total de agentes em campo. Sua resposta é a peça-chave para a próxima fase do plano.</p>
+
+                 <div class="mt-6">
+                    <label for="answer-input" class="block font-bold mb-2">INSIRA A CHAVE NUMÉRICA (O NÚMERO):</label>
+                    <input type="text" id="answer-input" class="w-full p-3 font-mono text-xl border-2 border-gray-400 bg-white" placeholder="Digite sua resposta...">
+                    <button onclick="checkAnswer()" class="btn-mission w-full mt-4 bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
+                        DECIFRAR COORDENADAS
+                    </button>
                  </div>
             </section>
             
-            <section id="action-required" class="mt-6 text-center">
-                <h2 class="text-xl font-bold text-red-800 mb-2">AÇÃO REQUERIDA (URGENTE)</h2>
-                <p class="mb-4">Confirme sua presença para que a inteligência possa definir o local seguro para o evento.</p>
-                
-                <div class="bg-gray-200 p-4 my-4">
-                    <p class="font-bold text-lg">PRAZO FINAL PARA CONFIRMAÇÃO:</p>
-                    <p class="text-2xl font-bold text-red-700">‼️ 31 DE OUTUBRO ‼️</p>
-                </div>
-
-                <div id="rsvp-container" class="mt-6">
-                    <p class="mb-4">Responda a este comunicado com sua decisão:</p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button onclick="handleRsvp(true)" class="btn-mission bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
-                            `ACEITO A MISSÃO`
-                        </button>
-                        <button onclick="handleRsvp(false)" class="btn-mission bg-red-700 hover:bg-red-800 text-white font-bold py-3 px-6 rounded-lg shadow-lg">
-                            `REJEITO A MISSÃO`
-                        </button>
-                    </div>
-                </div>
+            <section id="reveal-zone" class="mt-6 border-t-2 border-dashed border-gray-400 pt-6" style="display: none;">
+                <!-- O conteúdo aqui será preenchido pelo JavaScript -->
             </section>
 
         </main>
         
         <footer class="mt-8 pt-4 border-t border-gray-300 text-center text-sm text-gray-500">
-            <p>*Aguardando seu retorno. Mais informações serão enviadas apenas aos agentes confirmados.*</p>
-            <p class="mt-1">*Esta mensagem não se autodestruirá, mas o sigilo é essencial.*</p>
+            <p id="mission-footer-status">*Aguardando decodificação. O sucesso da missão depende de você.*</p>
         </footer>
 
     </div>
 
     <script>
-        function handleRsvp(accepted) {
-            const rsvpContainer = document.getElementById('rsvp-container');
-            let confirmationMessage = '';
-            
-            // IMPORTANTE: Substitua o XXXXXXXXXXX pelo seu número de WhatsApp com DDD (ex: 5511912345678)
-            const hostPhoneNumber = '5541988759875'; // O número que você configurou
-            let whatsAppMessage = '';
+        function identifyAgent() {
+            const agentNameInput = document.getElementById('agent-name-input');
+            const agentName = agentNameInput.value.trim();
+            const errorMsg = document.getElementById('name-error');
 
-            if (accepted) {
-                confirmationMessage = `
-                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
-                        <p class="font-bold text-lg">CONFIRMADO, AGENTE!</p>
-                        <p>Sua presença foi registrada. Um canal de comunicação seguro será aberto para enviar sua confirmação ao Comando Central.</p>
-                    </div>
-                `;
-                whatsAppMessage = encodeURIComponent('MISSÃO B-DAY 3.1: Eu aceito a missão! Presença confirmada.');
-            } else {
-                confirmationMessage = `
-                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
-                        <p class="font-bold text-lg">ENTENDIDO.</p>
-                        <p>Sua ausência foi registrada. Agradecemos a sua discrição. Sentiremos sua falta na operação.</p>
-                    </div>
-                `;
-                whatsAppMessage = encodeURIComponent('MISSÃO B-DAY 3.1: Infelizmente, terei que rejeitar a missão desta vez.');
+            if (agentName === "") {
+                errorMsg.style.display = 'block'; // Mostra o erro
+                agentNameInput.classList.add('border-red-500'); // Destaca o input
+                agentNameInput.focus();
+                return; // Para a execução
             }
-            rsvpContainer.innerHTML = confirmationMessage;
 
-            // Abre o link do WhatsApp em uma nova aba para enviar a confirmação
-            setTimeout(() => {
-                window.open(`https://wa.me/${hostPhoneNumber}?text=${whatsAppMessage}`, '_blank');
-            }, 800);
+            // Se chegou aqui, o nome é válido
+            errorMsg.style.display = 'none'; // Esconde o erro
+            agentNameInput.classList.remove('border-red-500'); // Remove o destaque
+
+            // Preenche o nome na Tela 2
+            document.getElementById('agent-name-display').textContent = agentName;
+
+            // Esconde a Tela 1 e Mostra a Tela 2
+            document.getElementById('security-check').style.display = 'none';
+            document.getElementById('mission-content').style.display = 'block';
         }
-    </script>
+
+        function checkAnswer() {
+            const answer = document.getElementById('answer-input').value.trim();
+            const revealZone = document.getElementById('reveal-zone');
+            const footerStatus = document.getElementById('mission-footer-status'); // Pega o elemento do rodapé da TELA 2
+            let resultMessage = '';
+
+            if (answer === '41') {
+                resultMessage = `
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
+                        <p class="font-bold text-xl">ACESSO AUTORIZADO!</p>
+                        <p class="font-bold text-lg mt-2">SINAL ESTABELECIDO. COORDENADAS COMPLETAS:</p>
+                    </div>
+
+                    <div class="mt-4 p-4 bg-gray-100 border border-gray-300">
+                        <p class="font-bold text-lg">📍 LOCAL SEGURO:</p>
+                        <p class="text-xl"><strong>Rua Lamenha Lins, 41</strong></p>
+                        <p class="text-lg">(Salão de Festas)</p>
+                        
+                        <p class="font-bold text-lg mt-4">🛂 PROTOCOLO DE ENTRADA:</p>
+                        <p class="text-lg">Seu nome está no <span class="font-bold">Manifesto de Agentes Aprovados</span>. Ao chegar ao *Checkpoint* (portaria), apenas se identifique para ter o acesso liberado.</p>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-lg font-bold">Contamos com você, Agente.</p>
+                        <p class="text-lg font-bold">DIA 15/11, ÀS 16H.</p>
+                    </div>
+                `;
+                footerStatus.textContent = '*Status da Missão: Coordenadas Decifradas. Agente mobilizado.*'; // MENSAGEM DE SUCESSO
+                footerStatus.classList.add('text-green-700', 'font-bold'); // Estiliza sucesso
+                footerStatus.classList.remove('text-red-700');
+            } else {
+                resultMessage = `
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+                        <p class="font-bold text-xl">ACESSO NEGADO!</p>
+                        <p class="mt-2">A cifra <strong class="mx-1">"${answer}"</strong> está incorreta. A inteligência inimiga pode ter corrompido sua linha.</p>
+                        <p class="font-bold mt-2">Tente novamente, Agente.</p>
+                    </div>
+                `;
+                footerStatus.textContent = '*Status da Missão: Falha na decodificação. Tente novamente.*'; // MENSAGEM DE FALHA
+                footerStatus.classList.add('text-red-700', 'font-bold'); // Estiliza falha
+                footerStatus.classList.remove('text-green-700');
+            }
+
+            revealZone.innerHTML = resultMessage;
+            revealZone.style.display = 'block'; // Torna a seção visível
+        }
+    </SCRIPT>
 
 </body>
 </html>
-
 
